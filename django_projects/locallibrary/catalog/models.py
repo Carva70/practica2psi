@@ -1,33 +1,27 @@
 from django.db import models
 from django.db.models.fields.related import ManyToManyField
 from django.db.models.fields.reverse_related import ManyToOneRel
+from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 import uuid # Required for unique book instances
 
 
 class Author(models.Model):
+    """Model representing an author."""
+    first_name = models.CharField(max_length=100, null=True)
+    last_name = models.CharField(max_length=100, null=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    date_of_death = models.DateField('Died', null=True, blank=True)
 
-    # Fields
-    name = models.CharField(max_length=20)
-    date_of_birth = models.DateField()
-    date_of_death = models.DateField()
-    
-    ...
-
-    # Metadata
     class Meta:
-        ordering = ['name']
+        ordering = ['last_name', 'first_name']
 
-    # Methods
     def get_absolute_url(self):
-        """Returns the url to access a particular instance of MyModelName."""
-        return self.reverse('model-detail-view', args=[str(self.id)])
+        """Returns the url to access a particular author instance."""
+        return reverse('author-detail', args=[str(self.id)])
 
     def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.name + self.date_of_birth + self.date_of_death
-
-
-from django.urls import reverse # Used to generate URLs by reversing the URL patterns
+        """String for representing the Model object."""
+        return f'{self.last_name}, {self.first_name}'
 
 
 class Genre(models.Model):
@@ -62,13 +56,15 @@ class Book(models.Model):
         """Returns the url to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
 
+    def display_genre(self):
+        """Create a string for the Genre. This is required to display genre in Admin."""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+
+    display_genre.short_description = 'Genre'
 
 class Language(models.Model):
 
-    name = models.CharField(max_length=50)
-
-    def __init__(self, name):
-        self.name = name
+    name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return self.name
