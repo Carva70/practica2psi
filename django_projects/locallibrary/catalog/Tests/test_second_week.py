@@ -107,13 +107,13 @@ class SecondWeekTests(TestCase):
         self.assertIn(b'9780345806789', response.content)
 
 
-    def test_challenge_part5_one(self):
+    def test_challenge_part6_one(self):
         response = self.client.get(reverse('authors'))
         self.assertIn(b'Asimov, Isaac', response.content)
         self.assertIn(b'King, Stephen', response.content)
 
 
-    def test_challenge_part5_two(self):
+    def test_challenge_part6_two(self):
         from catalog.models import Author
         #author = Author.objects.get(id=1)
         author = Author.objects.filter(last_name__contains='King').first()
@@ -121,7 +121,7 @@ class SecondWeekTests(TestCase):
         self.assertIn(b'Louis Creed', response.content)
 
 
-    def test_challenge_part5_three(self):
+    def test_challenge_part6_three(self):
         from catalog.models import Author
         #author = Author.objects.get(id=1)
         author = Author.objects.filter(last_name__contains='Asimov').first()
