@@ -17,6 +17,9 @@ def index(request):
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
 
+    num_genres = Genre.objects.count()
+
+    books_a = Book.objects.filter(title__contains='a').count()
 
     # Number of visits to this view, as counted in the session variable.
     num_visits = request.session.get('num_visits', 0)
@@ -28,6 +31,8 @@ def index(request):
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_visits': num_visits,
+        'num_genres': num_genres,
+        'books_a': books_a,
     }
 
     # Render the HTML template index.html with the data in the context variable
@@ -53,7 +58,7 @@ class AuthorDetailView(generic.DetailView):
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 2
+    paginate_by = 3
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
