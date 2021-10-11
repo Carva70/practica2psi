@@ -8,6 +8,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from catalog.forms import RenewBookForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
+from catalog.models import Author
+from catalog.models import Book
 
 # Create your views here.
 from .models import Book, Author, BookInstance, Genre
@@ -68,6 +73,44 @@ class BookListView(generic.ListView):
     model = Book
     paginate_by = 3
 
+
+class AuthorCreate(PermissionRequiredMixin, CreateView):
+    permission_required= 'catalog.can_add_author'
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    initial = {'date_of_death': '11/06/2020'}
+    template_name ='catalog/author_create.html'
+
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required= 'catalog.can_change_author'
+    model = Author
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+    template_name ='catalog/author_update.html'
+
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+    permission_required= 'catalog.can_delete_author'
+    model = Author
+    success_url = reverse_lazy('authors')
+
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    permission_required= 'catalog.can_add_book'
+    model = Book
+    fields = ['title', 'author', 'language', 'summary', 'isbn', 'genre']
+    
+
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required= 'catalog.can_change_book'
+    model = Book
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    permission_required= 'catalog.can_delete_book'
+    model = Book
+    success_url = reverse_lazy('books')
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 #  @permission_required('catalog.can_mark_returned', raise_exception=True)
@@ -126,3 +169,5 @@ def renew_book_librarian(request, pk):
     }
 
     return render(request, 'catalog/book_renew_librarian.html', context)
+
+
