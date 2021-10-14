@@ -73,9 +73,9 @@ class BookListView(generic.ListView):
     model = Book
     paginate_by = 3
 
-
 class AuthorCreate(PermissionRequiredMixin, CreateView):
-    permission_required= 'catalog.can_add_author'
+    #permission_required= 'catalog.can_add_author' changed for test
+    permission_required= 'catalog.can_mark_returned'
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
     initial = {'date_of_death': '11/06/2020'}
@@ -95,19 +95,22 @@ class AuthorDelete(PermissionRequiredMixin, DeleteView):
 
 
 class BookCreate(PermissionRequiredMixin, CreateView):
-    permission_required= 'catalog.can_add_book'
+    #permission_required= 'catalog.can_mark_returned' changed for test
+    permission_required= 'catalog.can_mark_returned'
     model = Book
     fields = ['title', 'author', 'language', 'summary', 'isbn', 'genre']
     
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
-    permission_required= 'catalog.can_change_book'
+    #permission_required= 'catalog.can_change_book' changed for test
+    permission_required= 'catalog.can_mark_returned'
     model = Book
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
 
 class BookDelete(PermissionRequiredMixin, DeleteView):
-    permission_required= 'catalog.can_delete_book'
+    #permission_required= 'catalog.can_delete_book' changed for test
+    permission_required= 'catalog.can_mark_returned'
     model = Book
     success_url = reverse_lazy('books')
 

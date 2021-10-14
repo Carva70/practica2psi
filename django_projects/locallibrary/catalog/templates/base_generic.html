@@ -34,7 +34,7 @@
         <br>
         {% if user.is_staff %}
           <li>Staff</li>
-          <li><a href="{% url 'borrowed' %}">All Borrowed</a></li>
+          <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>
         {% endif %}
         </ul>
         {% endblock %}
