@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import dj_database_url
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,12 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'c9l#3os980cm#r2ynr)5jzafrks^&1m_w8fn319gfuj&@20s7z'
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%asj6yjpkag')
+# SECRET_KEY = 'c9l#3os980cm#r2ynr)5jzafrks^&1m_w8fn319gfuj&@20s7z'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%asj6yjpkag')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-#DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+# DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = ['psi1.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'catalog.apps.CatalogConfig', #This object was created for us in /catalog/apps.py
+    'catalog.apps.CatalogConfig',  # This object was created for us in /catalog/apps.py
 ]
 
 MIDDLEWARE = [
@@ -82,20 +84,17 @@ if os.getenv('SQLITE', False):
     DATABASES['default'] = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-}
+    }
 else:
-    import dj_database_url
     DATABASES['default'] = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi',
-    conn_max_age=500)
+                                                  conn_max_age=500)
 
 
-
-#The following environment variable, called DATABASE_URL, has to be defined
-#at the o.s. level: export DATABASE_URL =
+# The following environment variable, called DATABASE_URL, has to be defined
+# at the o.s. level: export DATABASE_URL =
 # ’postgres://alumnodb:alumnodb@localhost:5432/psi’
-import dj_database_url
 db_from_env = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi',
-    conn_max_age=500)
+                                     conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
 
@@ -143,7 +142,6 @@ LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Heroku: Update database configuration from $DATABASE_URL.
-import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
@@ -151,11 +149,11 @@ DATABASES['default'].update(db_from_env)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 # The absolute path to the directory where collectstatic will collect static files for deployment
-#STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-#django_heroku.settings(locals())
+# django_heroku.settings(locals())
