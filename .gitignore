@@ -1,0 +1,8 @@
+*.pyc
+staticfiles
+uploads
+# Text backup files
+*.bak
+
+# Database
+*.sqlite3
